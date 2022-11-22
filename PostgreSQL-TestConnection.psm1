@@ -4,7 +4,7 @@
 	 Created on:   	2022. 10. 04. 15:05
 	 Created by:   	Cservenyi Szabolcs
 	 Organization: 	
-	 Filename:     	PostgreSQL-TestConnect.psm1
+	 Filename:     	PostgreSQL-TestConnection.psm1
 	 Description:
 	 ReleaseNotes:
 	 Version:		1.0
