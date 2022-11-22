@@ -20,8 +20,7 @@ function PostgreSQL-TestConnection
 		$Password = "",
 		$Server = "",
 		$Port = "",
-		$DBName = "",
-		$Query = ""
+		$DBName = ""
 	)
 	$ErrorActionPreference = 'Stop'
 	try
