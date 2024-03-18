@@ -5,7 +5,7 @@
 	 Created by:   	Cservenyi Szabolcs
 	 Organization: 	
 	 Filename:     	PostgreSQL-Connection.psm1
-	 Description:
+	 Description:	https://www.postgresql.org/ftp/odbc/versions/msi/
 	 ReleaseNotes:
 	 Version:		1.0
 	-------------------------------------------------------------------------
@@ -13,20 +13,41 @@
 	===========================================================================
 #>
 
-function PostgreSQL-Connection
+function PostgreSQL-Connect
 {
 	param (
 		$Username = "",
 		$Password = "",
 		$Server = "",
-		$Port = "",
+		$Port = "5432",
 		$DBName = "",
+        	[bool]$Test = $false,
 		$Query = ""
 	)
-	$Connection = New-Object System.Data.Odbc.OdbcConnection
+    if($Test -eq $true)
+    {
+        $ErrorActionPreference = 'Stop'
+	    try
+	    {
+		    $Connection = New-Object System.Data.Odbc.OdbcConnection
+		    $Connection.ConnectionString = "Driver={PostgreSQL UNICODE(x64)};Server=$Server;Port=$Port;Database=$DBName;Uid=$Username;Pwd=$Password"
+		    $Connection.Open()
+		    $true
+	    }
+	    catch
+	    {
+		    $false
+	    }
+	    finally
+	    {
+		    $Connection.Close()
+	    }
+    }
+    else
+    {
+        $Connection = New-Object System.Data.Odbc.OdbcConnection
 	$Connection.ConnectionString = "Driver={PostgreSQL UNICODE(x64)};Server=$Server;Port=$Port;Database=$DBName;Uid=$Username;Pwd=$Password"
 	$Cmd = New-Object System.Data.Odbc.OdbcCommand
-	
 	$Cmd.CommandText = $Query
 	$Cmd.Connection = $Connection
 	$Adapter = New-Object System.Data.Odbc.OdbcDataAdapter
@@ -35,6 +56,7 @@ function PostgreSQL-Connection
 	$Adapter.Fill($DataSet)
 	$DataSet.Tables[0]
 	$Connection.Close()
+    }
 }
 
 # Export-ModuleMember PostgreSQL-Connection
